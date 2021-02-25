@@ -18,7 +18,7 @@ import com.google.common.collect.Lists;
 @Slf4j
 public class Reader {
     
-    public static Object read(String filename) {
+    public static Map<Integer, Intersection> read(String filename) {
         
         final List<String> lines;
         
@@ -40,7 +40,7 @@ public class Reader {
         return problemParser.leCerveau();
     }
     
-    public static Map<String, Object> readAll() {
+    public static Map<String, Map<Integer, Intersection>> readAll() {
         return Stream.of(
                 "a.txt",
                 "b.txt",
