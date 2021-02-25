@@ -1,14 +1,18 @@
 package app.leasa.tools;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import lombok.extern.slf4j.Slf4j;
+
+import com.google.common.collect.Lists;
 
 @Slf4j
 public class Reader {
@@ -22,31 +26,27 @@ public class Reader {
         } catch (IOException e) {
             throw new RuntimeException("oups l'input " + filename, e);
         }
-        
-        lines.stream().findFirst().ifPresent(line -> {
-            
-            //TODO header
-            log.info(line);
-            
+    
+        final Optional<Object> firstLine = lines.stream().findFirst().map(line -> {
+            return Arrays.stream(line.split(" ")).map(Integer::valueOf).collect(Collectors.toList());
         });
-        
-        lines.stream().skip(1).forEach(line -> {
-            
-            //TODO corps
-            log.info(line);
-            
+    
+        lines.stream().skip(1).map(line -> {
+            return Lists.newArrayList(line.split(" "));
         });
-        
+        new ProblemParser(firstLine.get());
+    
         return lines;
     }
     
     public static Map<String, Object> readAll() {
         return Stream.of(
-                "a_example",
-                "b_little_bit_of_everything.in",
-                "c_many_ingredients.in",
-                "d_many_pizzas.in",
-                "e_many_teams.in"
+                "a.txt",
+                "b.txt",
+                "c.txt",
+                "d.txt",
+                "e.txt",
+                "f.txt"
         ).collect(Collectors.toMap(fileName -> fileName, Reader::read));
     }
     
