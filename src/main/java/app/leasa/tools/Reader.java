@@ -3,6 +3,7 @@ package app.leasa.tools;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +28,16 @@ public class Reader {
             throw new RuntimeException("oups l'input " + filename, e);
         }
     
-        final Optional<Object> firstLine = lines.stream().findFirst().map(line -> {
+        final Optional<List<Integer>> firstLine = lines.stream().findFirst().map(line -> {
             return Arrays.stream(line.split(" ")).map(Integer::valueOf).collect(Collectors.toList());
         });
     
-        lines.stream().skip(1).map(line -> {
+        final List<List<String>> otherLine = lines.stream().skip(1).map(line -> {
             return Lists.newArrayList(line.split(" "));
-        });
-        new ProblemParser(firstLine.get());
+        }).collect(Collectors.toList());
+        final ProblemParser problemParser = new ProblemParser(firstLine.get(), otherLine);
     
-        return lines;
+        return problemParser.leCerveau();
     }
     
     public static Map<String, Object> readAll() {
