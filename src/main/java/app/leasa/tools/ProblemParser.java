@@ -1,10 +1,13 @@
 package app.leasa.tools;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class ProblemParser {
     
     private final Integer duration;
@@ -17,7 +20,8 @@ public class ProblemParser {
     
     List<Rue> rues;
     Map<Integer, Intersection> intersections = new HashMap();
-    
+    Map<String, Rue> nomRueRue = new HashMap();
+
     public ProblemParser(List<Integer> premiereLigne, List<List<String>> otherLine) {
         this.duration = premiereLigne.get(0);
         this.nbIntersection = premiereLigne.get(1);
@@ -42,9 +46,10 @@ public class ProblemParser {
     }
     
     private void solution() {
-        intersections.forEach((integer, intersection) ->{
-            intersection.ruesArrivee.forEach(rue->{
-                final Intersection.Result result = new Intersection.Result(rue, 1);
+        intersections.forEach((integer, intersection) -> {
+            intersection.ruesArrivee.forEach(rue -> {
+                int size = rue.intersectionArrivee.ruesArrivee.size();
+                final Intersection.Result result = new Intersection.Result(rue, rue.nbVoiture / nbCar);
                 intersection.result.add(result);
             });
         });
@@ -57,13 +62,24 @@ public class ProblemParser {
         rues = this.rueLine.stream()
                 .map(list -> new Rue(intersections.get(Integer.valueOf(list.get(0))), intersections.get(Integer.valueOf(list.get(1))), list.get(2), Integer.valueOf(list.get(3))))
                 .collect(Collectors.toList());
-        rues.forEach(rue->{
+        rues.forEach(rue -> {
             final Intersection intersectionArrivee = rue.getIntersectionArrivee();
             intersectionArrivee.getRuesArrivee().add(rue);
             final Intersection intersectionDepart = rue.getIntersectionDepart();
             intersectionDepart.getRuesDeDepart().add(rue);
+            nomRueRue.put(rue.name, rue);
         });
-    
+
+        carLine.stream().forEach(strings -> strings.stream().skip(1).forEach(nomRue -> {
+            Rue rue = nomRueRue.get(nomRue);
+            if(rue==null){
+                log.warn(nomRue);
+            }else {
+                rue.nbVoiture++;
+            }
+        }));
+
+
     }
     
 }

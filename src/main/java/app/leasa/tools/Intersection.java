@@ -13,6 +13,7 @@ public class Intersection {
     List<Rue> ruesDeDepart = new ArrayList();
     List<Rue> ruesArrivee = new ArrayList();
     List<Result> result = new ArrayList<>();
+    Integer nbVoiture = 0;
 
     public Intersection(String id) {
         this.id = id;
