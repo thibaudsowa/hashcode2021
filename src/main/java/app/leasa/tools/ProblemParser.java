@@ -1,6 +1,8 @@
 package app.leasa.tools;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProblemParser {
@@ -42,7 +44,7 @@ public class ProblemParser {
     private void solution() {
         intersections.forEach((integer, intersection) ->{
             intersection.ruesArrivee.forEach(rue->{
-                final Intersection.Result result = new Intersection.Result(rue, 10);
+                final Intersection.Result result = new Intersection.Result(rue, 1);
                 intersection.result.add(result);
             });
         });
@@ -50,7 +52,7 @@ public class ProblemParser {
     
     private void parse() {
         for (int i = 0; i < nbIntersection; i++) {
-            intersections.put(i, new Intersection());
+            intersections.put(i, new Intersection(String.valueOf(i)));
         }
         rues = this.rueLine.stream()
                 .map(list -> new Rue(intersections.get(Integer.valueOf(list.get(0))), intersections.get(Integer.valueOf(list.get(1))), list.get(2), Integer.valueOf(list.get(3))))

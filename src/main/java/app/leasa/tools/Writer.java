@@ -2,7 +2,6 @@ package app.leasa.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,26 +9,27 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Writer {
     
     public static void write(String outputDir, String fileName, Map<Integer, Intersection> graph) {
-        
+
         //TODO créer le fichier
         List<String> lines = new ArrayList<>();
-        lines.add("" +graph.keySet().size());
-        graph.entrySet().stream().forEach(inter -> {
+        lines.add("" + (int) graph.values().stream().filter(intersection -> !intersection.result.isEmpty()).count());
+        graph.values().stream().forEach(inter -> {
             lines.add(inter.toString());
-            
         });
-    
-        String fileString = lines.stream().reduce("", (a, b) -> a +"\n"+ b);
-        
 
-        
+        String fileString = lines.stream().reduce("", (a, b) -> a + b);
+
+
         Path path = Paths.get(outputDir + "/" + fileName);
         byte[] strToBytes = fileString.getBytes();
         
