@@ -1,5 +1,7 @@
 package app.leasa.tools;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public class Reader {
     
     public static Object read(String filename) {
@@ -23,14 +26,14 @@ public class Reader {
         lines.stream().findFirst().ifPresent(line -> {
             
             //TODO header
-            System.out.println(line);
+            log.info(line);
             
         });
         
         lines.stream().skip(1).forEach(line -> {
             
             //TODO corps
-            System.out.println(line);
+            log.info(line);
             
         });
         
